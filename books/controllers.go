@@ -2,9 +2,10 @@ package books
 
 import (
 	"database/sql"
-	"net/http"
 	"github.com/rburawes/golang-demo/config"
+	"net/http"
 )
+
 // Index is the default page of the application.
 func Index(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
@@ -20,6 +21,7 @@ func Index(w http.ResponseWriter, r *http.Request) {
 
 	config.TPL.ExecuteTemplate(w, "books.gohtml", bks)
 }
+
 // Show provide book details.
 func Show(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
@@ -39,10 +41,12 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 	config.TPL.ExecuteTemplate(w, "show.gohtml", bk)
 }
+
 // Create adds new book.
 func Create(w http.ResponseWriter, r *http.Request) {
 	config.TPL.ExecuteTemplate(w, "create.gohtml", nil)
 }
+
 // CreateProcess validates the request method call the Create method
 // to execute adding of new book.
 func CreateProcess(w http.ResponseWriter, r *http.Request) {
@@ -79,6 +83,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	config.TPL.ExecuteTemplate(w, "update.gohtml", bk)
 }
+
 // UpdateProcess validates request method and call Update method to
 // modify book details.
 func UpdateProcess(w http.ResponseWriter, r *http.Request) {

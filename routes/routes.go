@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"net/http"
-	"github.com/rburawes/golang-demo/books"
 	"github.com/rburawes/golang-demo/authors"
+	"github.com/rburawes/golang-demo/books"
+	"net/http"
 )
+
 // LoadRoutes load routes, start and listen on the provided port.
 func LoadRoutes() {
 	// Index or main page.

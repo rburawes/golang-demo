@@ -1,9 +1,9 @@
 package authors
 
 import (
-	"net/http"
 	"encoding/json"
 	"fmt"
+	"net/http"
 )
 
 // GetAuthors returns all the available authors.

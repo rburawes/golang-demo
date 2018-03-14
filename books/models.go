@@ -2,19 +2,19 @@ package books
 
 import (
 	"errors"
+	"fmt"
+	"github.com/rburawes/golang-demo/config"
 	"net/http"
 	"strconv"
-	"github.com/rburawes/golang-demo/config"
-	"fmt"
 )
 
 // Book holds information about the book entry.
 type Book struct {
-	Isbn     string
-	Title    string
-	Author   string
-	Price    float32
-	AuthorID int32
+	Isbn      string
+	Title     string
+	Author    string
+	Price     float32
+	AuthorID  int32
 	TheAuthor string
 }
 
@@ -235,6 +235,6 @@ func validateForm(r *http.Request) (Book, error) {
 		return bk, errors.New("400. Bad Request. Invalid author id")
 	}
 
-	bk.AuthorID = int32(int64);
+	bk.AuthorID = int32(int64)
 	return bk, nil
 }

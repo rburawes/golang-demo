@@ -6,9 +6,9 @@ import (
 
 // Author holds data about the author of the book.
 type Author struct {
-	AuthorID  int32		`json:"id"`
-	Firstname string	`json:"firstname"`
-	Lastname  string	`json:"lastname"`
+	AuthorID  int32  `json:"id"`
+	Firstname string `json:"firstname"`
+	Lastname  string `json:"lastname"`
 }
 
 // AllAuthors retrieve authors from the database.
