@@ -3,7 +3,7 @@ package config
 import (
 	"database/sql"
 	"fmt"
-	// Not need for import.
+	// Not needed for import.
 	_ "github.com/lib/pq"
 )
 
