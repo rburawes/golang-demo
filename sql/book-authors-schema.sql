@@ -1,7 +1,5 @@
 ﻿-- Table: book_authors
-
-drop table if exists book_authors;
-
+-- drop table if exists book_authors;
 create table book_authors
 (
   id serial not null,
