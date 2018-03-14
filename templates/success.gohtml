@@ -1,0 +1,28 @@
+{{template "header"}}
+<body>
+    <div class="container">
+        <div class="alert alert-success">
+            <strong>Success!</strong> Book details saved.
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>ISBN</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Price</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><a href="/books/show?isbn={{.Isbn}}">{{.Isbn}}</a></td>
+                <td>{{.Title}}</td>
+                <td>{{.Author}}</td>
+                <td>{{.Price}}</td>
+            </tr>
+            </tbody>
+        </table>
+        <p class="link"><a href="/books" class="btn btn-default">Back</a></p>
+    </div>
+</body>
+{{template "footer"}}
