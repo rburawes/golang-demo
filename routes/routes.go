@@ -21,6 +21,7 @@ func LoadRoutes() {
 	http.HandleFunc("/authors", authors.GetAuthors)
 	// CSS, JS and images
 	http.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("./resource"))))
+	http.Handle("/favicon.ico", http.NotFoundHandler())
 	// Listens and serve requests.
 	http.ListenAndServe(":8080", nil)
 }
