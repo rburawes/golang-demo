@@ -8,5 +8,5 @@ A simple application developed using Golang, this demonstrates basic CRUD functi
 3. Schema and data scripts are located under 'sql' directory.
 ```
 ```
-Everything is inspired by Todd McCleod's Golang online courses.
+Everything is inspired by Todd McLeod's Golang online courses.
 ```
