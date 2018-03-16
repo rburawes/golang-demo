@@ -36,3 +36,100 @@ $(document).ready(function () {
         $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
     });
 });
+
+/**
+ * Validates signup form.
+ */
+$(document).ready(function () {
+    $flag = 1;
+    $("#firstname").focusout(function () {
+        if ($(this).val() == '') {
+            $(this).css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_firstname").text("* First name is required.");
+        }
+        else {
+            $(this).css("border-color", "#2eb82e");
+            $('#submit').attr('disabled', false);
+            $("#error_lastname").text("");
+
+        }
+    });
+    $("#lastname").focusout(function () {
+        if ($(this).val() == '') {
+            $(this).css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_lastname").text("* Last name is required!");
+        }
+        else {
+            $(this).css("border-color", "#2eb82e");
+            $('#submit').attr('disabled', false);
+            $("#error_lastname").text("");
+        }
+    });
+    $("#email").focusout(function () {
+        if ($(this).val() == '') {
+            $(this).css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_email").text("* Email address is required!");
+        }
+        else {
+            $(this).css("border-color", "#2eb82e");
+            $('#submit').attr('disabled', false);
+            $("#error_email").text("");
+        }
+    });
+    $("#password").focusout(function () {
+        if ($(this).val() == '') {
+            $(this).css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_password").text("* Please provide a valid password!");
+        }
+        else {
+            $(this).css({"border-color": "#2eb82e"});
+            $('#submit').attr('disabled', false);
+            $("#error_password").text("");
+
+        }
+    });
+    $("#cpassword").focusout(function () {
+        if ($(this).val() == '') {
+            $(this).css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_confirm_password").text("* Confirm your password please!");
+        } else {
+            $(this).css({"border-color": "#2eb82e"});
+            $('#submit').attr('disabled', false);
+            $("#error_confirm_password").text("");
+        }
+
+    });
+
+    $("#submit").click(function () {
+        if ($("#firstname").val() == '') {
+            $("#firstname").css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_firstname").text("* First name is required!");
+        }
+        if ($("#lastname").val() == '') {
+            $("#lastname").css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_lastname").text("* Last name is required!");
+        }
+        if ($("#email").val() == '') {
+            $("#email").css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_email").text("* Email address is required!");
+        }
+        if ($("#password").val() == '') {
+            $("#password").css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_password").text("* Please provide a valid password!");
+        }
+        if ($("#cpassword").val() == '') {
+            $("#cpassword").css("border-color", "#FF0000");
+            $('#submit').attr('disabled', true);
+            $("#error_confirm_password").text("* Confirm your password please!");
+        }
+    });
+});

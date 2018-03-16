@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/rburawes/golang-demo/authors"
 	"github.com/rburawes/golang-demo/books"
+	"github.com/rburawes/golang-demo/users"
 	"net/http"
 )
 
@@ -20,6 +21,9 @@ func LoadRoutes() {
 	http.HandleFunc("/books/delete/process", books.DeleteProcess)
 	// Author related route(s)
 	http.HandleFunc("/authors", authors.GetAuthors)
+	// User related route(s)
+	http.HandleFunc("/signup", users.Signup)
+	http.HandleFunc("/login", users.Login)
 	// CSS, JS and images
 	http.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("./resource"))))
 	http.Handle("/favicon.ico", http.NotFoundHandler())
