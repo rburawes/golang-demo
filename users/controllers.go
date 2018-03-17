@@ -55,12 +55,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		// check if the user exists
 		u, ok := FindUser(un)
 		if !ok {
-			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
+			http.Error(w, "username and/or password do not match", http.StatusForbidden)
 			return
 		}
 
 		if !u.validatePassword(p) {
-			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
+			http.Error(w, "username and/or password do not match", http.StatusForbidden)
 			return
 		}
 

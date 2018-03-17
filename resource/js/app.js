@@ -38,6 +38,27 @@ $(document).ready(function () {
 });
 
 /**
+ * Submits a form.
+ *
+ */
+$(document).ready(function () {
+    $("form").submit(function (event) {
+        event.preventDefault();
+        var post_url = $(this).attr("action");
+        var form_data = $(this).serialize();
+        $.post(post_url, form_data, function (response) {
+            window.location.href = "/";
+        }).fail(function (data, textStatus, xhr) {
+            console.log(xhr + ": " + textStatus)
+            $("#error-msg").html("<span><strong>ERROR:</strong> " +data.responseText+"</span>");
+            $("#error-msg").show();
+        }).always(function () {
+            console.log("Form submission ended");
+        });
+    });
+});
+
+/**
  * Validates signup form.
  */
 $(document).ready(function () {

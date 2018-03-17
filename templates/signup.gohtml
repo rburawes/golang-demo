@@ -4,7 +4,7 @@
     <div class="div-center">
         <div class="content">
             <h3>Get started</h3>
-            <form action="/signup" method="post">
+            <form action="/signup" method="post" id="signup">
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"
@@ -37,6 +37,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary" id="submit">Register</button>
                 <a href="/" id="cancel" name="cancel" class="btn btn-default">Cancel</a>
+                <div class="alert alert-danger" style="display: none" id="error-msg"></div>
             </form>
         </div>
     </div>

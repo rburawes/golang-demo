@@ -4,7 +4,7 @@
     <div class="div-center">
         <div class="content">
             <h3>Please Login</h3>
-            <form action="/login" method="post">
+            <form action="/login" method="post" id="login">
                 <div class="form-group">
                     <label for="email">Email:</label>
                     <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"
@@ -25,6 +25,7 @@
                     <button type="submit" class="btn btn-primary" id="submit">Log in</button>
                     <a href="/signup" class="btn btn-default" name="signup" id="signup">Sign up</a>
                 </div>
+                <div class="alert alert-danger" style="display: none" id="error-msg"></div>
             </form>
         </div>
     </div>

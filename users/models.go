@@ -22,7 +22,7 @@ func CheckUser(un string) (User, error) {
 	u, ok := FindUser(un)
 
 	if ok {
-		return u, errors.New("400. Bad Request. Username or email is taken")
+		return u, errors.New("username or email is taken")
 	}
 
 	return u, nil
@@ -59,7 +59,7 @@ func SaveUser(r *http.Request) (User, error) {
 	bs, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.MinCost)
 
 	if err != nil {
-		return u, errors.New("500. Internal server error")
+		return u, errors.New("the provided password is not valid")
 	}
 
 	u.Password = string(bs)
@@ -71,7 +71,7 @@ func SaveUser(r *http.Request) (User, error) {
 
 	stmt, err := tx.Prepare("INSERT INTO users (username, email, password, firstname, lastname) VALUES ($1, $2, $3, $4, $5)")
 	if err != nil {
-		return u, errors.New("500. Internal Server Error." + err.Error())
+		return u, errors.New("unable to process registration")
 	}
 
 	defer stmt.Close()
@@ -84,7 +84,7 @@ func SaveUser(r *http.Request) (User, error) {
 	// commit transaction
 	err = tx.Commit()
 	if err != nil {
-		return u, errors.New("500. Internal Server Error." + err.Error())
+		return u, errors.New("unable to process registration")
 	}
 
 	return u, nil
@@ -100,11 +100,11 @@ func validateForm(r *http.Request) (User, error) {
 	e := r.FormValue("email")
 
 	if p != cp {
-		return u, errors.New("400. Bad Request. Password does not match")
+		return u, errors.New("password does not match")
 	}
 
 	if e == "" || p == "" || cp == "" {
-		return u, errors.New("400. Bad Request. Fields cannot be empty")
+		return u, errors.New("fields cannot be empty")
 	}
 
 	_, err := CheckUser(e)
