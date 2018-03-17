@@ -119,3 +119,14 @@ func validateForm(r *http.Request) (User, error) {
 
 	return u, nil
 }
+
+// Validates the input password against the one in the database.
+func (u *User) validatePassword(p string) bool {
+
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(p))
+	if err != nil {
+		return false
+	}
+
+	return true
+}

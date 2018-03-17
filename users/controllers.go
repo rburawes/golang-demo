@@ -3,7 +3,6 @@ package users
 import (
 	"github.com/rburawes/golang-demo/config"
 	"github.com/satori/go.uuid"
-	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
 
@@ -63,12 +62,12 @@ func Login(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
 		}
-		// does the password provided match the password in the db
-		err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(p))
-		if err != nil {
+
+		if !u.validatePassword(p) {
 			http.Error(w, "Username and/or password do not match", http.StatusForbidden)
 			return
 		}
+
 		// create session
 		sID, _ := uuid.NewV4()
 		c := &http.Cookie{
