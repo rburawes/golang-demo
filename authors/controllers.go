@@ -3,11 +3,19 @@ package authors
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/rburawes/golang-demo/users"
 	"net/http"
 )
 
 // GetAuthors returns all the available authors.
 func GetAuthors(w http.ResponseWriter, r *http.Request) {
+
+	if !users.IsLoggedIn(r) {
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusForbidden) // 403
+		fmt.Fprintf(w, "%s\n", "Access to this resource was denied!")
+		return
+	}
 
 	if r.Method != "GET" {
 		http.Error(w, http.StatusText(http.StatusMethodNotAllowed), http.StatusMethodNotAllowed)

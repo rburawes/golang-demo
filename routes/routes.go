@@ -7,8 +7,9 @@ import (
 	"net/http"
 )
 
-// LoadRoutes load routes, start and listen on the provided port.
+// LoadRoutes handles routes to pages of the application.
 func LoadRoutes() {
+
 	// Index or main page.
 	http.HandleFunc("/", index)
 	// Book related routes
@@ -24,14 +25,18 @@ func LoadRoutes() {
 	// User related route(s)
 	http.HandleFunc("/signup", users.Signup)
 	http.HandleFunc("/login", users.Login)
+	http.HandleFunc("/logout", users.Logout)
 	// CSS, JS and images
 	http.Handle("/assets/", http.StripPrefix("/assets", http.FileServer(http.Dir("./resource"))))
 	http.Handle("/favicon.ico", http.NotFoundHandler())
 	// Listens and serve requests.
 	http.ListenAndServe(":8080", nil)
+
 }
 
 // Redirect to list of books.
 func index(w http.ResponseWriter, r *http.Request) {
+
 	http.Redirect(w, r, "/books", http.StatusSeeOther)
+
 }

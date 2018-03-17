@@ -2,12 +2,12 @@ package users
 
 import (
 	"github.com/rburawes/golang-demo/config"
-	"github.com/satori/go.uuid"
 	"net/http"
 )
 
 // Signup allows the user to create an account.
 func Signup(w http.ResponseWriter, r *http.Request) {
+
 	if IsLoggedIn(r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
@@ -24,23 +24,19 @@ func Signup(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// create session
-		sID, _ := uuid.NewV4()
-		c := &http.Cookie{
-			Name:  "session",
-			Value: sID.String(),
-		}
-		http.SetCookie(w, c)
-		StoredSessions[c.Value] = u.UserName
+		CreateSession(w, u)
 
 		// redirect
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 	config.TPL.ExecuteTemplate(w, "signup.gohtml", u)
+
 }
 
 // Login allows registered user to access the application.
 func Login(w http.ResponseWriter, r *http.Request) {
+
 	if IsLoggedIn(r) {
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
@@ -69,17 +65,25 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		}
 
 		// create session
-		sID, _ := uuid.NewV4()
-		c := &http.Cookie{
-			Name:  "session",
-			Value: sID.String(),
-		}
-		CurrentUsers[un] = u
-		http.SetCookie(w, c)
-		StoredSessions[c.Value] = un
+		CreateSession(w, u)
+
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	config.TPL.ExecuteTemplate(w, "login.gohtml", u)
+
+}
+
+// Logout method to call when the user signed out of the application.
+func Logout(w http.ResponseWriter, r *http.Request) {
+
+	if !IsLoggedIn(r) {
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	}
+
+	RemoveSession(w, r)
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

@@ -26,7 +26,9 @@ func CheckUser(un string) (User, error) {
 	}
 
 	return u, nil
+
 }
+
 // FindUser looks for registerd user by username.
 func FindUser(un string) (User, bool) {
 
@@ -118,6 +120,7 @@ func validateForm(r *http.Request) (User, error) {
 	u.Password = p
 
 	return u, nil
+
 }
 
 // Validates the input password against the one in the database.
@@ -129,4 +132,5 @@ func (u *User) validatePassword(p string) bool {
 	}
 
 	return true
+
 }

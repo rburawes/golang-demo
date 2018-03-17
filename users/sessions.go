@@ -5,41 +5,47 @@ import (
 	"net/http"
 )
 
-// CurrentUsers are the currently logged in users.
-var CurrentUsers = map[string]User{}
-
 // StoredSessions has session id the user ID
 var StoredSessions = map[string]string{} // session ID, user ID
 
-// GetUser retrieves the currently logged in user.
-func GetUser(w http.ResponseWriter, req *http.Request) User {
-	// get cookie
-	c, err := req.Cookie("session")
-	if err != nil {
-		sID, _ := uuid.NewV4()
-		c = &http.Cookie{
-			Name:  "session",
-			Value: sID.String(),
-		}
+// CreateSession creates a session for a logged user.
+func CreateSession(w http.ResponseWriter, u User) {
 
+	// create session
+	sID, _ := uuid.NewV4()
+	c := &http.Cookie{
+		Name:  "session",
+		Value: sID.String(),
 	}
 	http.SetCookie(w, c)
+	StoredSessions[c.Value] = u.UserName
 
-	// if the user exists already, get user
-	var u User
-	if un, ok := StoredSessions[c.Value]; ok {
-		u = CurrentUsers[un]
+}
+
+// RemoveSession deletes expires user's session.
+func RemoveSession(w http.ResponseWriter, r *http.Request) {
+
+	c, _ := r.Cookie("session")
+	// delete the session
+	delete(StoredSessions, c.Value)
+	// remove the cookie
+	c = &http.Cookie{
+		Name:   "session",
+		Value:  "",
+		MaxAge: -1,
 	}
-	return u
+	http.SetCookie(w, c)
 }
 
 // IsLoggedIn verifies if the user is already in the session and logged in.
-func IsLoggedIn(req *http.Request) bool {
-	c, err := req.Cookie("session")
+func IsLoggedIn(r *http.Request) bool {
+
+	c, err := r.Cookie("session")
 	if err != nil {
 		return false
 	}
 	un := StoredSessions[c.Value]
-	_, ok := CurrentUsers[un]
+	_, ok := FindUser(un)
 	return ok
+
 }

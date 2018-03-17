@@ -1,7 +1,8 @@
 {{template "header"}}
 <body onload="loadAuthors();">
+{{template "nav-bar"}}
 <div class="container">
-    <h2>Add a new book</h2>
+    {{template "content-header"}}
     <form action="/books/create/process" method="post">
         <div class="form-group">
             <label for="isbn">ISBN:</label>

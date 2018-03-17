@@ -20,6 +20,7 @@ type Book struct {
 
 // AllBooks retriev all the books from the database.
 func AllBooks() ([]Book, error) {
+
 	rows, err := config.Database.Query("SELECT b.isbn, b.title,  concat(a.firstname, ' ', a.lastname) as author, b.price, a.id FROM books b INNER JOIN book_authors ba on b.isbn = ba.book_isbn INNER JOIN authors a ON ba.author_id = a.id")
 	if err != nil {
 		return nil, err
@@ -39,10 +40,12 @@ func AllBooks() ([]Book, error) {
 		return nil, err
 	}
 	return bks, nil
+
 }
 
 // GetBook retrieve specific book record from the database.
 func GetBook(r *http.Request) (Book, error) {
+
 	bk := Book{}
 	isbn := r.FormValue("isbn")
 	if isbn == "" {
@@ -57,6 +60,7 @@ func GetBook(r *http.Request) (Book, error) {
 	}
 
 	return bk, nil
+
 }
 
 // SaveBook create new book entry.
@@ -106,10 +110,12 @@ func SaveBook(r *http.Request) (Book, error) {
 	}
 
 	return GetBook(r)
+
 }
 
 // UpdateBook modifies existing book details.
 func UpdateBook(r *http.Request) (Book, error) {
+
 	// Get form values and validate
 	bk, err := validateForm(r)
 
@@ -155,10 +161,12 @@ func UpdateBook(r *http.Request) (Book, error) {
 	}
 
 	return GetBook(r)
+
 }
 
 // DeleteBook removes book entry from the database.
 func DeleteBook(r *http.Request) error {
+
 	isbn := r.FormValue("isbn")
 	if isbn == "" {
 		return errors.New("400. Bad Request")
@@ -201,14 +209,18 @@ func DeleteBook(r *http.Request) error {
 	}
 
 	return nil
+
 }
 
 // FormatBookPrice formats the price of the book.
 func (book *Book) FormatBookPrice() string {
+
 	return fmt.Sprintf("$%.2f", book.Price)
+
 }
 
 func validateForm(r *http.Request) (Book, error) {
+
 	bk := Book{}
 	bk.Isbn = r.FormValue("isbn")
 	bk.Title = r.FormValue("title")
@@ -237,4 +249,5 @@ func validateForm(r *http.Request) (Book, error) {
 
 	bk.AuthorID = int32(int64)
 	return bk, nil
+
 }
