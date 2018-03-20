@@ -15,7 +15,6 @@ func LoadRoutes() {
 	// Book related routes
 	http.HandleFunc("/books", books.Index)
 	http.HandleFunc("/books/show", books.Show)
-	http.HandleFunc("/books/create", books.Create)
 	http.HandleFunc("/books/create/process", books.CreateProcess)
 	http.HandleFunc("/books/update", books.Update)
 	http.HandleFunc("/books/update/process", books.UpdateProcess)

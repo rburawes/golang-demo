@@ -1,30 +1,19 @@
-{{template "header"}}
-<body>
-{{template "nav-bar"}}
-<div class="container">
-    <div class="alert alert-success">
-        <strong>Success!</strong> Book details saved.
+{{define "success"}}
+<div class="modal fade success-popup" id="successPopup" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="myModalLabel">Saved!</h4>
+            </div>
+            <div class="modal-body text-center">
+                <img src="/assets/img/check.png">
+                <p id="successContent" class="lead"></p>
+                <a href="/books" class="rd_more btn btn-default">Go to books</a>
+            </div>
+
+        </div>
     </div>
-{{template "content-header"}}
-    <table class="table table-striped">
-        <thead>
-        <tr>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td><a href="/books/show?isbn={{.Isbn}}">{{.Isbn}}</a></td>
-            <td>{{.Title}}</td>
-            <td>{{.Author}}</td>
-            <td>{{.Price}}</td>
-        </tr>
-        </tbody>
-    </table>
-    <p class="link"><a href="/books" class="btn btn-default">Back</a></p>
 </div>
-</body>
-{{template "footer"}}
+{{end}}

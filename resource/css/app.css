@@ -37,3 +37,8 @@ div.content {
     border-bottom: 2px solid #ccc;
     display: table;
 }
+
+.success-popup  {
+    transition: .3s ease all;
+    font-family: 'Roboto', sans-serif;
+}

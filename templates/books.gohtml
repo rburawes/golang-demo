@@ -19,14 +19,15 @@
             <td>{{.Title}}</td>
             <td>{{.Author}}</td>
             <td>{{.FormatBookPrice}}</td>
-            <td><a href="/books/update?isbn={{.Isbn}}" class="btn btn-primary">update</a></td>
+            <td><a href="#" onclick="updateBook({{.Isbn}})" class="btn btn-primary" data-toggle="modal" data-target="#book" data-authorId="{{.AuthorID}}">update</a></td>
             <td><a href="#" data-href="/books/delete/process?isbn={{.Isbn}}" data-toggle="modal" class="btn btn-danger" data-target="#confirm-delete">delete</a></td>
         </tr>
         {{end}}
         </tbody>
     </table>
-    <a href="/books/create" class="btn btn-primary">New</a>
+    <button id="addBtn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#book" data-authorId="0">Add</button>
 </div>
+{{template "book-modal"}}
 {{template "delete-modal"}}
 </body>
 {{template "footer"}}

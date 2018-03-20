@@ -1,13 +1,17 @@
 /**
  * Get all the authors and populate author drop down menu.
  */
-function loadAuthors(authorId) {
-    $(document).ready(function () {
+$(document).ready(function () {
+    $('#book').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var authorId = button.data('authorid')
         $.ajax({
-            url: '/authors',
-            type: 'get',
-            dataType: 'json',
-            success: function (response) {
+            type: "get",
+            url: "/authors",
+            dataType: "json",
+            cache: false
+        }).done(function (response) {
+            if (response != "") {
                 var len = response.length;
                 $("#author").empty();
                 var authors = '<option value="0">Select author</option>';
@@ -22,7 +26,46 @@ function loadAuthors(authorId) {
                     $("#author option[value=" + authorId + "]").attr('selected', 'selected');
                 }
             }
+            else {
+                console.log("error");
+            }
         });
+    });
+});
+
+/**
+ * If add book button is clicked.
+ */
+$(document).ready(function () {
+    $('#addBtn').on('click', function (event) {
+        $('#bookForm').attr('action', '/books/create/process');
+        $("#isbn").val('');
+        $("#title").val('');
+        $("#price").val('');
+    });
+});
+
+/**
+ * When update book is clicked.
+ * @param isbn
+ */
+function updateBook(isbn) {
+    event.preventDefault();
+    $('#bookForm').attr('action', '/books/update/process');
+    $.ajax({
+        type: "get",
+        url: "/books/update?isbn=" + isbn,
+        dataType: "json",
+        cache: false
+    }).done(function (data) {
+        if (data != "") {
+            $("#isbn").val(data.isbn);
+            $("#title").val(data.title);
+            $("#price").val(data.price);
+        }
+        else {
+            console.log("error");
+        }
     });
 }
 
@@ -31,8 +74,8 @@ function loadAuthors(authorId) {
  * TODO: Not the best practice to delete using GET method, should be ended in POST/DELETE.
  */
 $(document).ready(function () {
-    $('#confirm-delete').on('show.bs.modal', function (e) {
-        $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+    $('#confirm-delete').on('show.bs.modal', function (event) {
+        $(this).find('.btn-ok').attr('href', $(event.relatedTarget).data('href'));
         $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
     });
 });
@@ -46,15 +89,25 @@ $(document).ready(function () {
         event.preventDefault();
         var post_url = $(this).attr("action");
         var form_data = $(this).serialize();
-        $.post(post_url, form_data, function (response) {
-            window.location.href = "/";
-        }).fail(function (data, textStatus, xhr) {
-            console.log(xhr + ": " + textStatus)
-            $("#error-msg").html("<span><strong>ERROR:</strong> " +data.responseText+"</span>");
+        $.post(post_url, form_data).done(function (data) {
+            if ((post_url.indexOf("/login") === -1) && (post_url.indexOf("/signup") === -1)) {
+                $("#book").prop('disabled', true);
+                $('#successContent').html(data.title);
+                $('#successPopup').modal('show')
+            } else {
+                window.location.href = "/";
+            }
+        }).fail(function (data) {
+            $("#error-msg").html("<span><strong>ERROR:</strong> " + data.responseText + "</span>");
             $("#error-msg").show();
         }).always(function () {
             console.log("Form submission ended");
         });
+    });
+
+    $("#successPopup").on("hidden.bs.modal", function () {
+        $("#book").prop('disabled', false);
+        window.location = "/books";
     });
 });
 

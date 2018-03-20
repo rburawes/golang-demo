@@ -57,17 +57,6 @@ func Show(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Create adds new book.
-func Create(w http.ResponseWriter, r *http.Request) {
-
-	if !users.IsLoggedIn(r) {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-	config.TPL.ExecuteTemplate(w, "create.gohtml", nil)
-
-}
-
 // CreateProcess validates the request method call the Create method
 // to execute adding of new book.
 func CreateProcess(w http.ResponseWriter, r *http.Request) {
@@ -83,11 +72,11 @@ func CreateProcess(w http.ResponseWriter, r *http.Request) {
 
 	bk, err := SaveBook(r)
 	if err != nil {
-		http.Error(w, http.StatusText(406), http.StatusNotAcceptable)
+		http.Error(w, err.Error(), http.StatusNotAcceptable)
 		return
 	}
 
-	config.TPL.ExecuteTemplate(w, "success.gohtml", bk)
+	bk.ConvertToJSON(w)
 
 }
 
@@ -113,7 +102,7 @@ func Update(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	config.TPL.ExecuteTemplate(w, "update.gohtml", bk)
+	bk.ConvertToJSON(w)
 
 }
 

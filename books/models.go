@@ -1,6 +1,7 @@
 package books
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/rburawes/golang-demo/config"
@@ -10,12 +11,12 @@ import (
 
 // Book holds information about the book entry.
 type Book struct {
-	Isbn      string
-	Title     string
-	Author    string
-	Price     float32
-	AuthorID  int32
-	TheAuthor string
+	Isbn      string  `json:"isbn"`
+	Title     string  `json:"title"`
+	Author    string  `json:"authorName"`
+	Price     float32 `json:"price"`
+	AuthorID  int32   `json:"authorId"`
+	TheAuthor string  `json:"authorAbout"`
 }
 
 // AllBooks retriev all the books from the database.
@@ -80,7 +81,7 @@ func SaveBook(r *http.Request) (Book, error) {
 
 	stmt, err := tx.Prepare("INSERT INTO books (isbn, title, price) VALUES ($1, $2, $3)")
 	if err != nil {
-		return bk, errors.New("500. Internal Server Error." + err.Error())
+		return bk, errors.New("book cannot be saved")
 	}
 
 	defer stmt.Close()
@@ -106,7 +107,7 @@ func SaveBook(r *http.Request) (Book, error) {
 	// commit transaction
 	err = tx.Commit()
 	if err != nil {
-		return bk, errors.New("500. Internal Server Error." + err.Error())
+		return bk, errors.New("book cannot be saved")
 	}
 
 	return GetBook(r)
@@ -213,9 +214,9 @@ func DeleteBook(r *http.Request) error {
 }
 
 // FormatBookPrice formats the price of the book.
-func (book *Book) FormatBookPrice() string {
+func (bk *Book) FormatBookPrice() string {
 
-	return fmt.Sprintf("$%.2f", book.Price)
+	return fmt.Sprintf("$%.2f", bk.Price)
 
 }
 
@@ -228,26 +229,40 @@ func validateForm(r *http.Request) (Book, error) {
 	a := r.FormValue("author")
 
 	if bk.Isbn == "" || bk.Title == "" {
-		return bk, errors.New("400. Bad Request. Fields cannot be empty")
+		return bk, errors.New("fields cannot be empty")
 	}
 
 	f64, err := strconv.ParseFloat(p, 32)
 	if err != nil {
-		return bk, errors.New("406. Not Acceptable. Price must be a number")
+		return bk, errors.New("price must be a number")
 	}
 
 	bk.Price = float32(f64)
 
 	int64, err := strconv.ParseInt(a, 10, 64)
 	if err != nil {
-		return bk, errors.New("406. Not Acceptable. Author ID can't be processed")
+		return bk, errors.New("author ID can't be processed")
 	}
 
 	if int32(int64) <= 0 {
-		return bk, errors.New("400. Bad Request. Invalid author id")
+		return bk, errors.New("invalid author id")
 	}
 
 	bk.AuthorID = int32(int64)
 	return bk, nil
 
+}
+
+// ConvertToJSON converts the the book struct to json object
+func (bk *Book) ConvertToJSON(w http.ResponseWriter) {
+
+	uj, err := json.Marshal(bk)
+	if err != nil {
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		fmt.Println(err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK) // 200
+	fmt.Fprintf(w, "%s\n", uj)
 }
