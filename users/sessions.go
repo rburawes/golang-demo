@@ -17,7 +17,8 @@ func CreateSession(w http.ResponseWriter, u User) {
 		Name:  "session",
 		Value: sID.String(),
 	}
-	http.SetCookie(w, c)
+
+	refreshCookie(w, c)
 	StoredSessions[c.Value] = u.UserName
 
 }
@@ -34,7 +35,7 @@ func RemoveSession(w http.ResponseWriter, r *http.Request) {
 		Value:  "",
 		MaxAge: -1,
 	}
-	http.SetCookie(w, c)
+	refreshCookie(w, c)
 }
 
 // IsLoggedIn verifies if the user is already in the session and logged in.
@@ -48,4 +49,10 @@ func IsLoggedIn(r *http.Request) bool {
 	_, ok := FindUser(un)
 	return ok
 
+}
+
+// refreshes cookie value
+func refreshCookie(w http.ResponseWriter, c *http.Cookie)  {
+	c.Path = "/"
+	http.SetCookie(w, c)
 }
