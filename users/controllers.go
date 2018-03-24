@@ -3,6 +3,7 @@ package users
 import (
 	"github.com/rburawes/golang-demo/config"
 	"net/http"
+	"time"
 )
 
 // Signup allows the user to create an account.
@@ -84,6 +85,10 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	RemoveSession(w, r)
+
+	if time.Now().Sub(storedSessionClean) > (time.Second * 30) {
+		go cleanSessions()
+	}
 
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
 }

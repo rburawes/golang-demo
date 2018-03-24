@@ -3,10 +3,23 @@ package users
 import (
 	"github.com/satori/go.uuid"
 	"net/http"
+	"time"
 )
 
+type session struct {
+	un           string
+	lastActivity time.Time
+}
+
 // StoredSessions has session id the user ID
-var StoredSessions = map[string]string{} // session ID, user ID
+var storedSessions = make(map[string]session) // session ID, user ID
+
+// Amount of time for the application to clean all the sessions after log out
+var storedSessionClean time.Time
+
+func init() {
+	storedSessionClean = time.Now()
+}
 
 // CreateSession creates a session for a logged user.
 func CreateSession(w http.ResponseWriter, u User) {
@@ -19,7 +32,7 @@ func CreateSession(w http.ResponseWriter, u User) {
 	}
 
 	refreshCookie(w, c)
-	StoredSessions[c.Value] = u.UserName
+	storedSessions[c.Value] = session{u.UserName, time.Now()}
 
 }
 
@@ -28,7 +41,7 @@ func RemoveSession(w http.ResponseWriter, r *http.Request) {
 
 	c, _ := r.Cookie("session")
 	// delete the session
-	delete(StoredSessions, c.Value)
+	delete(storedSessions, c.Value)
 	// remove the cookie
 	c = &http.Cookie{
 		Name:   "session",
@@ -45,14 +58,30 @@ func IsLoggedIn(r *http.Request) bool {
 	if err != nil {
 		return false
 	}
-	un := StoredSessions[c.Value]
-	_, ok := FindUser(un)
+
+	s, ok := storedSessions[c.Value]
+	if ok {
+		s.lastActivity = time.Now()
+		storedSessions[c.Value] = s
+	}
+
+	_, ok = FindUser(s.un)
 	return ok
 
 }
 
+// CleanSessions remove all the sessions after logout
+func cleanSessions() {
+	for k, v := range storedSessions {
+		if time.Now().Sub(v.lastActivity) > (time.Second * 30) {
+			delete(storedSessions, k)
+		}
+	}
+	storedSessionClean = time.Now()
+}
+
 // refreshes cookie value
-func refreshCookie(w http.ResponseWriter, c *http.Cookie)  {
+func refreshCookie(w http.ResponseWriter, c *http.Cookie) {
 	c.Path = "/"
 	http.SetCookie(w, c)
 }
