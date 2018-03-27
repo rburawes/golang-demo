@@ -86,6 +86,7 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 
 	RemoveSession(w, r)
 
+	// not the best place and not to be used in production
 	if time.Now().Sub(storedSessionClean) > (time.Second * 30) {
 		go cleanSessions()
 	}

@@ -70,7 +70,8 @@ func IsLoggedIn(r *http.Request) bool {
 
 }
 
-// CleanSessions remove all the sessions after logout
+// remove all the sessions after logout, all that
+// has been inactive for more than 30 seconds
 func cleanSessions() {
 	for k, v := range storedSessions {
 		if time.Now().Sub(v.lastActivity) > (time.Second * 30) {
