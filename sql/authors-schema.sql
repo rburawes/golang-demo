@@ -4,7 +4,7 @@ drop table if exists authors cascade;
 
 create table authors
 (
-  id serial,
+  author_id serial,
   firstname character varying(255) not null,
   lastname character varying(255) not null,
   middlename character varying(255),

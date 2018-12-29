@@ -22,7 +22,9 @@ type Book struct {
 // AllBooks retriev all the books from the database.
 func AllBooks() ([]Book, error) {
 
-	rows, err := config.Database.Query("SELECT b.isbn, b.title,  concat(a.firstname, ' ', a.lastname) as author, b.price, a.id FROM books b INNER JOIN book_authors ba on b.isbn = ba.book_isbn INNER JOIN authors a ON ba.author_id = a.id")
+	allBooksQry := "SELECT b.isbn, b.title,  concat(a.firstname, ' ', a.lastname) as author, b.price, a.author_id FROM books b " +
+		"INNER JOIN book_authors ba on b.isbn = ba.book_isbn INNER JOIN authors a ON ba.author_id = a.author_id"
+	rows, err := config.Database.Query(allBooksQry)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +55,7 @@ func GetBook(r *http.Request) (Book, error) {
 		return bk, errors.New("400. Bad Request")
 	}
 
-	row := config.Database.QueryRow("SELECT b.isbn, b.title, concat(a.firstname, ' ', a.lastname) as author, b.price, a.id, a.about FROM books b INNER JOIN book_authors ba on b.isbn = ba.book_isbn INNER JOIN authors a ON ba.author_id = a.id WHERE b.isbn = $1", isbn)
+	row := config.Database.QueryRow("SELECT b.isbn, b.title, concat(a.firstname, ' ', a.lastname) as author, b.price, a.author_id, a.about FROM books b INNER JOIN book_authors ba on b.isbn = ba.book_isbn INNER JOIN authors a ON ba.author_id = a.author_id WHERE b.isbn = $1", isbn)
 
 	err := row.Scan(&bk.Isbn, &bk.Title, &bk.Author, &bk.Price, &bk.AuthorID, &bk.TheAuthor)
 	if err != nil {

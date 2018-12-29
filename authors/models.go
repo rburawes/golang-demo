@@ -13,7 +13,7 @@ type Author struct {
 
 // AllAuthors retrieve authors from the database.
 func AllAuthors() ([]Author, error) {
-	rows, err := config.Database.Query("SELECT a.id, a.firstname, a.lastname FROM authors a")
+	rows, err := config.Database.Query("SELECT a.author_id, a.firstname, a.lastname FROM authors a")
 	if err != nil {
 		return nil, err
 	}
