@@ -19,6 +19,7 @@ func init() {
 	}
 
 	if err = Database.Ping(); err != nil {
+	    fmt.Println(err)
 		panic(err)
 	}
 	fmt.Println("Database connection successful.")

@@ -7,5 +7,6 @@ A simple application developed using Golang, this demonstrates basic CRUD functi
 ```
 1. Open 'http://localhost:8080' in a browser. user: admin@danubee.com, password: password123
 2. Application is using PostgreSQL 'postgres://postgres:postgres@localhost/library?sslmode=disable'.
-3. Schema and data scripts are located under 'sql' directory.
+3. Script to creates chema and data is located under 'sql' directory.
+4. When you build this application either include the templates folder on same directory where the build is or use a third party library to include/bind template files to the binary.
 ```
